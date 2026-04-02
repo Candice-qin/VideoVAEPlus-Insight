@@ -1,5 +1,3 @@
-# VideoVAEPlus-Insight
-本项目是对 **[VideoVAE+](https://github.com/VideoVerses/VideoVAEPlus)** (ICCV 2025) 的深度技术解读、二次开发与具身智能部署实践。   > 我们不仅复现了原模型的训练与推理，更深入剖析了其核心设计（时空分离编码、文本引导、多尺度KL等），并进一步将潜空间与 **CoWVLA** 结合，在 **Isaac Sim** 中完成了机器人闭环控制的全链路实现。
 # VideoVAE+ Insight: 深度技术解读与具身智能部署实践
 
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
@@ -23,42 +21,16 @@
 
 ## 📖 目录
 
-- [背景介绍](#背景介绍)
-- [仓库内容概览](#仓库内容概览)
 - [快速开始](#快速开始)
 - [技术深度解读](#技术深度解读)
 - [具身智能部署](#具身智能部署)
+- [项目结构](#项目结构)
 - [引用与致谢](#引用与致谢)
 - [许可证](#许可证)
 
 ---
 
-## 背景介绍
-
-VideoVAE+ 是首个专门针对**大幅运动视频**的高保真 Video VAE，通过时空分离编码和跨模态文本引导，大幅提升了重建质量。  
-然而，原项目主要聚焦在视频压缩与重建本身，未深入探讨其在**具身智能**（尤其是 VLA 模型）中的应用潜力。  
-本项目旨在填补这一空白：
-
-1. 完整还原 VideoVAE+ 的训练与推理流程
-2. 深度解析其核心模块设计原理
-3. 将其潜空间与 CoWVLA 结合，构建世界模型推理链
-4. 在 Isaac Sim 中完成真机仿真部署
-
----
-
-## 仓库内容概览
-
-| 目录/文件 | 说明 |
-|-----------|------|
-| `docs/` | 各模块详细技术文档（含代码片段与图解） |
-| `src/` | 可复用的模型实现、训练/评估/部署脚本 |
-| `scripts/` | 一键运行脚本 |
-| `configs/` | 配置文件模板 |
-| `examples/` | 示例数据 |
-
----
-
-## 快速开始
+## 🚀 快速开始
 
 ### 环境配置
 
@@ -68,3 +40,94 @@ cd VideoVAEPlus-Insight
 conda create --name vae_insight python=3.10 -y
 conda activate vae_insight
 pip install -r requirements.txt
+```
+
+### 下载预训练权重
+
+从 [VideoVAE+ 官方仓库](https://github.com/VideoVerses/VideoVAEPlus) 下载所需权重（如 `sota-16z-text.pth`），放置于 `ckpt/` 目录。
+
+### 运行推理示例
+
+```bash
+# 视频重建
+bash scripts/run_inference_video.sh
+
+# 图像重建
+bash scripts/run_inference_image.sh
+```
+
+### 训练模型
+
+```bash
+bash scripts/run_training.sh config_16z
+```
+
+---
+
+## 📚 技术深度解读
+
+以下文档按模块拆解，每篇均包含**设计动机、核心代码实现、训练/评估细节**：
+
+- [整体架构与设计思想](docs/01_architecture_overview.md)
+- [时序感知空间编码器（完整代码）](docs/02_temporal_aware_encoder.md)
+- [训练数据预处理与损失函数](docs/03_training_pipeline.md)
+- [CoWVLA 动作预测头设计](docs/04_cowvla_action_head.md)
+- [大幅运动场景重建质量评估](docs/05_large_motion_eval.md)
+
+---
+
+## 🤖 具身智能部署
+
+我们展示了如何将 VideoVAE+ 的潜变量解耦为**结构潜变量**（静态场景）和**运动潜变量**（动态轨迹），并利用它们构建世界模型预测链。
+
+- [Isaac Sim 完整集成示例](docs/06_isaac_sim_integration.md)
+- 支持 ROS2 接口，可直接用于真实机械臂
+
+---
+
+## 📁 项目结构
+
+```
+VideoVAEPlus-Insight/
+├── README.md                   # 项目主页
+├── docs/                       # 深度技术文档
+│   ├── 01_architecture_overview.md
+│   ├── 02_temporal_aware_encoder.md
+│   ├── 03_training_pipeline.md
+│   ├── 04_cowvla_action_head.md
+│   ├── 05_large_motion_eval.md
+│   └── 06_isaac_sim_integration.md
+├── src/                        # 可复用代码模块
+│   ├── video_vae_plus/         # 模型实现（带注释）
+│   ├── training/               # 训练脚本
+│   ├── evaluation/             # 评估脚本
+│   └── deployment/             # Isaac Sim / ROS2 部署
+├── scripts/                    # 一键运行脚本
+├── configs/                    # 配置文件
+├── examples/                   # 示例数据
+└── requirements.txt            # Python 依赖
+```
+
+---
+
+## 📝 引用与致谢
+
+本项目是对 **VideoVAE+** 开源工作的技术解读与延伸。  
+若您使用本仓库内容，请引用原始论文并注明本仓库地址：
+
+```bibtex
+@inproceedings{xing2025videovaeplus,
+  title={VideoVAE+: Large Motion Video Autoencoding with Cross-modal Video VAE},
+  author={Xing, Yazhou and Fei, Yang and He, Yingqing and Chen, Jingye and Xie, Jiaxin and Chi, Xiaowei and Chen, Qifeng},
+  booktitle={ICCV},
+  year={2025}
+}
+```
+
+同时，本仓库遵循原项目 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) 许可证。
+
+---
+
+## ⭐ Star History
+
+如果这个项目对你有帮助，欢迎点个 Star！您的支持是我们持续分享的动力。
