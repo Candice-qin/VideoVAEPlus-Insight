@@ -1,0 +1,11 @@
+torch>=2.0.0
+torchvision>=0.15.0
+numpy
+opencv-python
+pillow
+tqdm
+pyyaml
+lpips
+# 以下为可选，根据实际需要
+# transformers
+# omni (Isaac Sim 内部)
