@@ -1,0 +1,19 @@
+model:
+  latent_channels: 16
+  use_text_guidance: true
+
+training:
+  batch_size: 4
+  lr: 1e-4
+  epochs: 100
+
+loss:
+  l1_weight: 1.0
+  lpips_weight: 0.1
+  temporal_weight: 0.05
+  motion_weight: 0.1
+  kl_weight: 0.0001
+
+data:
+  train_dir: "data/train.csv"
+  val_dir: "data/val.csv"
